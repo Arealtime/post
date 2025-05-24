@@ -1,0 +1,7 @@
+<?php
+
+namespace Arealtime\Post\App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class PostLike extends Model {}
