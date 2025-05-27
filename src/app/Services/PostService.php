@@ -2,11 +2,12 @@
 
 namespace Arealtime\Post\App\Services;
 
+use Arealtime\Post\App\Enums\PostTypeEnum;
 use Arealtime\Post\App\Models\Post;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Str;
 
 class PostService
 {
@@ -56,6 +57,8 @@ class PostService
      */
     public function create(array $data): Post
     {
+        $data['type'] = $this->getType($data['attachments']);
+
         return Post::create($data);
     }
 
@@ -149,5 +152,22 @@ class PostService
         $post->save();
 
         return $post;
+    }
+
+    private function getType(Collection $attachments): PostTypeEnum
+    {
+        if ($attachments->count() === 1) {
+            $attachment = $attachments->first();
+
+            if (Str::startsWith($attachment->getMimeType(), 'video/')) {
+                return PostTypeEnum::Video;
+            }
+        }
+
+        if ($attachments->count() > 1) {
+            return PostTypeEnum::Gallery;
+        }
+
+        return PostTypeEnum::Photo;
     }
 }
