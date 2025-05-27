@@ -25,6 +25,7 @@ class PostResource extends JsonResource
             'is_archived' => $this->is_archived,
             'is_pinned' => $this->is_pinned,
             'posted_at' => $this->posted_at,
+            'attachments' => PostAttachmentResource::collection($this->attachments),
             'created_at' => $this->created_at
         ];
     }

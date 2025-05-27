@@ -19,6 +19,6 @@ class PostServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Bootstrapping
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
     }
 }

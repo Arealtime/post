@@ -18,7 +18,7 @@ trait PostCommentAction
     {
         $this->checkPostSet();
 
-        return $this->post->postComments()->get();
+        return $this->post->comments()->get();
     }
 
     /**
@@ -31,7 +31,7 @@ trait PostCommentAction
     {
         $this->checkPostSet();
 
-        return $this->post->postComments()->create([
+        return $this->post->comments()->create([
             'user_id' => Auth::id(),
             'content' => $data['content'],
         ]);
@@ -48,6 +48,6 @@ trait PostCommentAction
     {
         $this->checkPostSet();
 
-        return $this->post->postComments()->where('user_id', Auth::id())->delete();
+        return $this->post->comments()->where('user_id', Auth::id())->delete();
     }
 }

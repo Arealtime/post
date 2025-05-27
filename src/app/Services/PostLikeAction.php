@@ -49,7 +49,7 @@ trait PostLikeAction
     {
         $this->post->increment('like_count');
 
-        $this->post->postLikes()->create([
+        $this->post->likes()->create([
             'user_id' => Auth::id(),
         ]);
 
@@ -65,7 +65,7 @@ trait PostLikeAction
     {
         $this->post->decrement('like_count');
 
-        $this->post->postLikes()
+        $this->post->likes()
             ->where('user_id', Auth::id())
             ->delete();
 

@@ -12,5 +12,5 @@ class Post extends Model
 {
     use SoftDeletes, PostScope, PostRelation, PostVirtualAttribute;
 
-    protected $fillable = ['caption', 'location', 'posted_at'];
+    protected $fillable = ['caption', 'location', 'user_id', 'posted_at', 'type'];
 }

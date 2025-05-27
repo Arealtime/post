@@ -7,11 +7,13 @@ use Arealtime\Post\App\Models\Post;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Str;
+use Throwable;
 
 class PostService
 {
-    use PostLikeAction, PostCommentAction;
+    use PostLikeAction, PostCommentAction, PostAttachmentAction;
 
     private Post $post;
 
@@ -46,7 +48,7 @@ class PostService
      */
     public function all(): Collection
     {
-        return Post::all();
+        return Post::with('attachments')->latest()->get();
     }
 
     /**
@@ -55,11 +57,23 @@ class PostService
      * @param array $data
      * @return Post
      */
-    public function create(array $data): Post
+    public function create(array $data)
     {
-        $data['type'] = $this->getType($data['attachments']);
+        $data['type'] = $this->getType(collect($data['attachments']));
 
-        return Post::create($data);
+        DB::beginTransaction();
+        try {
+            $post = Post::create($data);
+
+            $this->setPost($post);
+
+            $this->createAttachment($data['attachments']);
+            DB::commit();
+            return $this->post;
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return $throwable;
+        }
     }
 
     /**
@@ -84,11 +98,26 @@ class PostService
      *
      * @throws ModelNotFoundException
      */
-    public function update(int $id, array $data): Post
+    public function update(int $id, array $data)
     {
-        $post = $this->find($id);
-        $post->update($data);
-        return $post;
+        $data['type'] = $this->getType(collect($data['attachments']));
+
+        DB::beginTransaction();
+        try {
+            $post = $this->find($id);
+            $post->update($data);
+
+            $this->setPost($post);
+
+            $this->deleteAttachment();
+            $this->createAttachment($data['attachments']);
+
+            DB::commit();
+            return $this->post;
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return $throwable;
+        }
     }
 
     /**
@@ -154,9 +183,9 @@ class PostService
         return $post;
     }
 
-    private function getType(Collection $attachments): PostTypeEnum
+    private function getType($attachments): PostTypeEnum
     {
-        if ($attachments->count() === 1) {
+        if ($attachments->count() == 1) {
             $attachment = $attachments->first();
 
             if (Str::startsWith($attachment->getMimeType(), 'video/')) {

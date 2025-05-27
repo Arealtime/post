@@ -3,6 +3,7 @@
 namespace Arealtime\Post\App\Traits\Post;
 
 use Arealtime\Post\App\Helpers\ConfigHelper;
+use Arealtime\Post\App\Models\PostAttachment;
 use Arealtime\Post\App\Models\PostComment;
 use Arealtime\Post\App\Models\PostLike;
 use Arealtime\Post\App\Models\PostShare;
@@ -29,5 +30,10 @@ trait PostRelation
     public function user(): BelongsTo
     {
         return $this->belongsTo(ConfigHelper::getUserModel());
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(PostAttachment::class);
     }
 }

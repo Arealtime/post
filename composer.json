@@ -23,7 +23,8 @@
         }
     ],
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "arealtime/file-uploader":"*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
