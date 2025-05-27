@@ -3,12 +3,41 @@
 namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\Post;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class PostService
 {
+    use PostLikeAction, PostCommentAction;
+
+    private Post $post;
+
+    /**
+     * Set the current post instance.
+     *
+     * @param Post $post
+     * @return void
+     */
+    public function setPost(Post $post): self
+    {
+        $this->post = $post;
+        return $this;
+    }
+
+    /**
+     * Check if post has been set, throw exception if not.
+     *
+     * @return void
+     * @throws LogicException
+     */
+    private function checkPostSet(): void
+    {
+        if (!$this->post) {
+            throw new Exception("Post instance is not set. Make sure to call setPost() on the postService object before invoking this method.");
+        }
+    }
     /**
      * Get all posts.
      *
