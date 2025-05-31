@@ -9,6 +9,21 @@ use Throwable;
 
 trait PostLikeAction
 {
+
+    /**
+     * Get all likes for the currently set post.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection The collection of likes related to the current post
+     *
+     * @throws \Exception If the current post is not set
+     */
+    public function allLikes()
+    {
+        $this->checkPostSet();
+
+        return $this->post->postLikes;
+    }
+
     /**
      * Toggle the like status for a given post by the current user.
      * If already liked, it will be unliked. Otherwise, it will be liked.

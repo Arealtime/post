@@ -2,4 +2,38 @@
 
 namespace Arealtime\Post\App\Traits\Post;
 
-trait PostScope {}
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+
+trait PostScope
+{
+    public function scopePinned(Builder $builder): Builder
+    {
+        return $builder->where('is_pinned', true);
+    }
+
+    public function scopeNotPinned(Builder $builder): Builder
+    {
+        return $builder->where('is_pinned', false);
+    }
+
+    public function scopeArchived(Builder $builder): Builder
+    {
+        return $builder->where('is_archived', true);
+    }
+
+    public function scopeNotArchived(Builder $builder): Builder
+    {
+        return $builder->where('is_archived', false);
+    }
+
+    public function scopePublished(Builder $builder): Builder
+    {
+        return $builder->where('posted_at', '<=', Carbon::now());
+    }
+
+    public function scopeUnPublished(Builder $builder): Builder
+    {
+        return $builder->where('posted_at', '>', Carbon::now());
+    }
+}

@@ -13,19 +13,21 @@ use Throwable;
 
 class PostService
 {
-    use PostLikeAction, PostCommentAction, PostAttachmentAction;
+    use PostLikeAction, PostCommentAction, PostAttachmentAction, PostPinAction, PostPublishAction, PostPublishAction, PostArchiveAction;
 
     private Post $post;
 
     /**
-     * Set the current post instance.
+     * Set the current post instance by post ID.
      *
-     * @param Post $post
-     * @return void
+     * @param int $id The ID of the post to set
+     * @return self Returns the current instance for method chaining
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the post with the given ID is not found
      */
-    public function setPost(Post $post): self
+    public function setPost(int $id): self
     {
-        $this->post = $post;
+        $this->post = $this->find($id);
         return $this;
     }
 
@@ -146,41 +148,6 @@ class PostService
     {
         $post = $this->find($id);
         return $post->forceDelete();
-    }
-
-
-    /**
-     * Toggle the is_pinned status of a post.
-     *
-     * @param int $id
-     * @return Post
-     *
-     * @throws ModelNotFoundException
-     */
-    public function togglePinned(int $id): Post
-    {
-        $post = $this->find($id);
-        $post->is_pinned = !$post->is_pinned;
-        $post->save();
-
-        return $post;
-    }
-
-    /**
-     * Toggle the is_archived status of a post.
-     *
-     * @param int $id
-     * @return Post
-     *
-     * @throws ModelNotFoundException
-     */
-    public function toggleArchived(int $id): Post
-    {
-        $post = $this->find($id);
-        $post->is_pinned = !$post->is_pinned;
-        $post->save();
-
-        return $post;
     }
 
     private function getType($attachments): PostTypeEnum

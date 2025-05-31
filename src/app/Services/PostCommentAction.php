@@ -14,7 +14,7 @@ trait PostCommentAction
      *
      * @return Collection<int, PostComment> Collection of PostComment models
      */
-    public function all(): Collection
+    public function allComments(): Collection
     {
         $this->checkPostSet();
 
@@ -27,7 +27,7 @@ trait PostCommentAction
      * @param array{content: string} $data Comment data, must include 'content'
      * @return PostComment Newly created PostComment model
      */
-    public function create(array $data): PostComment
+    public function createComment(array $data): PostComment
     {
         $this->checkPostSet();
 
@@ -38,16 +38,17 @@ trait PostCommentAction
     }
 
     /**
-     * Delete all comments made by the current authenticated user for the current post.
+     * Delete a specific comment made by the currently authenticated user for the current post.
      *
-     * @return int Number of deleted comments
+     * @param int $commentId The ID of the comment to delete
+     * @return int Number of deleted comments (0 or 1)
      *
-     * @throws Throwable If a database error occurs
+     * @throws Throwable If a database error occurs during deletion
      */
-    public function delete(): int
+    public function deleteComment(int $commentId): int
     {
         $this->checkPostSet();
 
-        return $this->post->comments()->where('user_id', Auth::id())->delete();
+        return $this->post->comments()->where('id', $commentId)->delete();
     }
 }
