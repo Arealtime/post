@@ -4,6 +4,7 @@ namespace Arealtime\Post\App\Traits\Post;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 trait PostScope
 {
@@ -35,5 +36,10 @@ trait PostScope
     public function scopeUnPublished(Builder $builder): Builder
     {
         return $builder->where('posted_at', '>', Carbon::now());
+    }
+
+    public function scopeCurrentUser(Builder $builder): Builder
+    {
+        return $builder->where('user_id', Auth::id());
     }
 }

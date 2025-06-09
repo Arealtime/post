@@ -16,6 +16,7 @@ class PostService
     use PostLikeAction, PostCommentAction, PostAttachmentAction, PostPinAction, PostPublishAction, PostPublishAction, PostArchiveAction;
 
     private Post $post;
+    private array $data;
 
     /**
      * Set the current post instance by post ID.
@@ -25,9 +26,15 @@ class PostService
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the post with the given ID is not found
      */
-    public function setPost(int $id): self
+    public function setPost(Post $post): self
     {
-        $this->post = $this->find($id);
+        $this->post = $post;
+        return $this;
+    }
+
+    public function setData(array $data): self
+    {
+        $this->data = data;
         return $this;
     }
 
@@ -50,7 +57,7 @@ class PostService
      */
     public function all(): Collection
     {
-        return Post::with('attachments')->latest()->get();
+        return Post::with('attachments')->currentUser()->latest()->get();
     }
 
     /**
@@ -59,17 +66,17 @@ class PostService
      * @param array $data
      * @return Post
      */
-    public function create(array $data)
+    public function create()
     {
-        $data['type'] = $this->getType(collect($data['attachments']));
+        $this->data['type'] = $this->getType(collect($this->data['attachments']));
 
         DB::beginTransaction();
         try {
-            $post = Post::create($data);
+            $post = Post::create($this->data);
 
             $this->setPost($post);
 
-            $this->createAttachment($data['attachments']);
+            $this->createAttachment($this->data['attachments']);
             DB::commit();
             return $this->post;
         } catch (Throwable $throwable) {
@@ -94,22 +101,21 @@ class PostService
     /**
      * Update a post by ID.
      *
-     * @param int $id
+     * @param Post $post
      * @param array $data
      * @return Post
      *
      * @throws ModelNotFoundException
      */
-    public function update(int $id, array $data)
+    public function update(Post $post, array $data)
     {
         $data['type'] = $this->getType(collect($data['attachments']));
 
         DB::beginTransaction();
         try {
-            $post = $this->find($id);
-            $post->update($data);
-
             $this->setPost($post);
+
+            $this->post->update($data);
 
             $this->deleteAttachment();
             $this->createAttachment($data['attachments']);
@@ -130,9 +136,8 @@ class PostService
      *
      * @throws ModelNotFoundException
      */
-    public function delete(int $id): bool
+    public function delete(Post $post): bool
     {
-        $post = $this->find($id);
         return $post->delete();
     }
 
@@ -144,9 +149,8 @@ class PostService
      *
      * @throws ModelNotFoundException
      */
-    public function forceDelete(int $id): bool
+    public function forceDelete(Post $post): bool
     {
-        $post = $this->find($id);
         return $post->forceDelete();
     }
 

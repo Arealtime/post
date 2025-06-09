@@ -4,13 +4,14 @@ namespace Arealtime\Post\App\Http\Controllers;
 
 use Arealtime\Post\App\Http\Requests\PostRequest;
 use Arealtime\Post\App\Http\Resources\PostResource;
+use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-
     public function __construct(private readonly PostService $postService) {}
 
     public function index(Request $request)
@@ -18,28 +19,32 @@ class PostController extends Controller
         return PostResource::collection($this->postService->all());
     }
 
-    public function store(PostRequest $request)
+    public function store(PostRequest $request): Post
     {
-        $this->postService->create([
-            'caption' => $request->input('caption'),
-            'location' => $request->input('location'),
-            'posted_at' => $request->input('posted_at'),
-            'attachments' => $request->file('attachments')
-        ]);
+        return $this->postService
+            ->setData([
+                'caption' => $request->input('caption'),
+                'location' => $request->input('location'),
+                'posted_at' => $request->input('posted_at'),
+                'attachments' => $request->file('attachments'),
+                'user_id'   => Auth::id()
+            ])->create();
     }
 
-    public function update(PostRequest $request, int $id)
+    public function update(PostRequest $request, Post $post): Post
     {
-        $this->postService->update($id, [
-            'caption' => $request->input('caption'),
-            'location' => $request->input('location'),
-            'posted_at' => $request->input('posted_at'),
-            'attachments' => $request->file('attachments')
-        ]);
+        return $this->postService
+            ->setData([
+                'caption' => $request->input('caption'),
+                'location' => $request->input('location'),
+                'posted_at' => $request->input('posted_at'),
+                'attachments' => $request->file('attachments')
+            ])
+            ->update($post);
     }
 
-    public function destroy(int $id)
+    public function destroy(Post $post)
     {
-        $this->postService->delete($id);
+        $this->postService->delete($post);
     }
 }

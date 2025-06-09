@@ -13,8 +13,8 @@ Route::prefix('api/arealtime/posts')
         Route::controller(PostController::class)->group(function () {
             Route::get('', 'index');
             Route::post('', 'store');
-            Route::put('{id}', 'update');
-            Route::delete('{id}', 'destroy');
+            Route::put('{post}', 'update');
+            Route::delete('{post}', 'destroy');
         });
 
         Route::controller(PostPinController::class)
