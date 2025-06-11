@@ -2,6 +2,7 @@
 
 namespace Arealtime\Post\App\Traits\Post;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,6 @@ trait PostScope
 
     public function scopeCurrentUser(Builder $builder): Builder
     {
-        return $builder->where('user_id', Auth::id());
+        return $builder->where('user_id', auth()->id());
     }
 }

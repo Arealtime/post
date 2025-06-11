@@ -34,7 +34,7 @@ class PostService
 
     public function setData(array $data): self
     {
-        $this->data = data;
+        $this->data = $data;
         return $this;
     }
 
@@ -81,7 +81,7 @@ class PostService
             return $this->post;
         } catch (Throwable $throwable) {
             DB::rollBack();
-            return $throwable;
+            throw  $throwable;
         }
     }
 
@@ -124,7 +124,7 @@ class PostService
             return $this->post;
         } catch (Throwable $throwable) {
             DB::rollBack();
-            return $throwable;
+            throw $throwable;
         }
     }
 

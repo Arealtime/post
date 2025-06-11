@@ -2,36 +2,37 @@
 
 namespace Arealtime\Post\App\Http\Controllers;
 
+use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Services\PostService;
 use Illuminate\Routing\Controller;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Throwable;
 
 class PostArchiveController extends Controller
 {
     public function __construct(private readonly PostService $postService) {}
 
     /**
-     * Get all archived posts for the currently authenticated user.
+     * @return Collection<Post>
      *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of archived posts
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If any required data is missing
+     * @throws ModelNotFoundException
      */
-    public function archive()
+    public function archived(): Collection
     {
         return $this->postService->allArchived();
     }
 
     /**
-     * Toggle the archived status of a specified post for the currently authenticated user.
+     * @param Post $post
+     * 
+     * @return Post
      *
-     * @param int $id The ID of the post to toggle the archived status
-     * @return \Arealtime\Post\App\Models\Post The updated Post instance after toggling pin status
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the post is not found
-     * @throws \Throwable If any error occurs during the toggle operation
+     * @throws ModelNotFoundException
+     * @throws Throwable
      */
-    public function toggleArchive(int $id)
+    public function toggleArchive(Post $post): Post
     {
-        return $this->postService->toggleArchive($id);
+        return $this->postService->setPost($post)->toggleArchive();
     }
 }

@@ -27,10 +27,9 @@ Route::prefix('api/arealtime/posts')
 
         Route::controller(PostArchiveController::class)
             ->name('archive.')
-            ->prefix('archive')
             ->group(function () {
-                Route::get('{post}', 'archived');
-                Route::post('{post}/toggle', 'toggleArchive');
+                Route::get('archived', 'archived');
+                Route::post('{post}/archive', 'toggleArchive');
             });
 
         Route::controller(PostLikeController::class)
