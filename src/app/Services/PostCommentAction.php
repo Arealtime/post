@@ -27,13 +27,13 @@ trait PostCommentAction
      * @param array{content: string} $data Comment data, must include 'content'
      * @return PostComment Newly created PostComment model
      */
-    public function createComment(array $data): PostComment
+    public function createComment(): PostComment
     {
         $this->checkPostSet();
 
         return $this->post->comments()->create([
             'user_id' => Auth::id(),
-            'content' => $data['content'],
+            'content' => $this->data['content']
         ]);
     }
 
@@ -45,10 +45,10 @@ trait PostCommentAction
      *
      * @throws Throwable If a database error occurs during deletion
      */
-    public function deleteComment(int $commentId): int
+    public function deleteComment(): int
     {
         $this->checkPostSet();
 
-        return $this->post->comments()->where('id', $commentId)->delete();
+        return $this->post->comments()->where('id', $this->data['comment_id'])->delete();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Arealtime\Post\App\Http\Controllers;
 
+use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Services\PostService;
 use Illuminate\Routing\Controller;
 
@@ -30,8 +31,8 @@ class PostPinController extends Controller
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the post is not found
      * @throws \Throwable If any error occurs during the toggle operation
      */
-    public function togglePin(int $id)
+    public function togglePin(Post $post)
     {
-        return $this->postService->togglePin($id);
+        return $this->postService->togglePin($post);
     }
 }

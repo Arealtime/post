@@ -107,18 +107,18 @@ class PostService
      *
      * @throws ModelNotFoundException
      */
-    public function update(Post $post, array $data)
+    public function update(Post $post)
     {
-        $data['type'] = $this->getType(collect($data['attachments']));
+        $this->data['type'] = $this->getType(collect($this->data['attachments']));
 
         DB::beginTransaction();
         try {
             $this->setPost($post);
 
-            $this->post->update($data);
+            $this->post->update($this->data);
 
             $this->deleteAttachment();
-            $this->createAttachment($data['attachments']);
+            $this->createAttachment($this->data['attachments']);
 
             DB::commit();
             return $this->post;

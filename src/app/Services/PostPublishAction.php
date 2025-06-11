@@ -17,7 +17,7 @@ trait PostPublishAction
      */
     public function allPublished()
     {
-        return Post::where('user_id', Auth::id())->published()->get();
+        return Post::currentUser()->published()->get();
     }
 
     /**
@@ -29,6 +29,6 @@ trait PostPublishAction
      */
     public function allUnPublished()
     {
-        return Post::where('user_id', Auth::id())->unPublished()->get();
+        return Post::currentUser()->unPublished()->get();
     }
 }

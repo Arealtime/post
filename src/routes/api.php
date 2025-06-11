@@ -21,16 +21,16 @@ Route::prefix('api/arealtime/posts')
             ->name('pin.')
             ->prefix('pin')
             ->group(function () {
-                Route::get('{id}', 'pinned');
-                Route::post('{id}/toggle', 'togglePin');
+                Route::get('{post}', 'pinned');
+                Route::post('{post}/toggle', 'togglePin');
             });
 
         Route::controller(PostArchiveController::class)
             ->name('archive.')
             ->prefix('archive')
             ->group(function () {
-                Route::get('{id}', 'archived');
-                Route::post('{id}/toggle', 'toggleArchive');
+                Route::get('{post}', 'archived');
+                Route::post('{post}/toggle', 'toggleArchive');
             });
 
         Route::controller(PostLikeController::class)

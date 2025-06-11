@@ -2,6 +2,7 @@
 
 namespace Arealtime\Post\App\Http\Controllers;
 
+use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Services\PostService;
 use Illuminate\Routing\Controller;
 
@@ -19,7 +20,7 @@ class PostLikeController extends Controller
      */
     public function index(int $id)
     {
-        return $this->postService->setPost($id)->allLikes();
+        return $this->postService->setPost(Post::findOrFail($id))->allLikes();
     }
 
     /**
@@ -35,6 +36,6 @@ class PostLikeController extends Controller
      */
     public function toggleLike(int $id)
     {
-        return $this->postService->setPost($id)->toggleLike();
+        return $this->postService->setPost(Post::findOrFail($id))->toggleLike();
     }
 }

@@ -3,7 +3,6 @@
 namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\Post;
-use Illuminate\Container\Attributes\Auth;
 
 trait PostPinAction
 {
@@ -15,20 +14,18 @@ trait PostPinAction
      */
     public function allPinned()
     {
-        return Post::where('user_id', Auth::id())->pinned()->get();
+        return Post::currentUser()->pinned()->get();
     }
     /**
      * Toggle the is_pinned status of a post.
      *
      * @throws ModelNotFoundException
      */
-    public function togglePin(): Post
+    public function togglePin(Post $post): Post
     {
-        $this->checkPostSet();
+        $post->is_pinned = !$post->is_pinned;
+        $post->save();
 
-        $this->post->is_pinned = !$this->post->is_pinned;
-        $this->post->save();
-
-        return $this->post;
+        return $post;
     }
 }

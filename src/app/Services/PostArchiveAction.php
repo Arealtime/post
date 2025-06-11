@@ -15,7 +15,7 @@ trait PostArchiveAction
      */
     public function allArchived()
     {
-        return Post::where('user_id', Auth::id())->archived()->get();
+        return Post::currentUser()->archived()->get();
     }
 
     /**
@@ -26,9 +26,8 @@ trait PostArchiveAction
      *
      * @throws ModelNotFoundException
      */
-    public function toggleArchive(int $id): Post
+    public function toggleArchive(Post $post): Post
     {
-        $post = $this->find($id);
         $post->is_pinned = !$post->is_pinned;
         $post->save();
 
