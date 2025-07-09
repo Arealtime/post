@@ -1,6 +1,6 @@
 <?php
 
-use Arealtime\Post\App\Console\Commands\Post;
+use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Models\PostComment;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

@@ -4,15 +4,12 @@ namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\PostComment;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
-use Throwable;
 
 trait PostCommentAction
 {
+
     /**
-     * Get all comments for the current post.
-     *
-     * @return Collection<int, PostComment> Collection of PostComment models
+     * @return Collection<PostComment>
      */
     public function allComments(): Collection
     {
@@ -22,33 +19,25 @@ trait PostCommentAction
     }
 
     /**
-     * Create a new comment for the current post by the authenticated user.
-     *
-     * @param array{content: string} $data Comment data, must include 'content'
-     * @return PostComment Newly created PostComment model
+     * @return PostComment
      */
     public function createComment(): PostComment
     {
         $this->checkPostSet();
 
         return $this->post->comments()->create([
-            'user_id' => Auth::id(),
             'content' => $this->data['content']
         ]);
     }
 
     /**
-     * Delete a specific comment made by the currently authenticated user for the current post.
-     *
-     * @param int $commentId The ID of the comment to delete
      * @return int Number of deleted comments (0 or 1)
-     *
-     * @throws Throwable If a database error occurs during deletion
      */
     public function deleteComment(): int
     {
         $this->checkPostSet();
 
-        return $this->post->comments()->where('id', $this->data['comment_id'])->delete();
+        $comment =  $this->post->comments()->where('id', $this->data['comment_id'])->firstOrFail();
+        return $comment->delete();
     }
 }

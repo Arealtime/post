@@ -50,10 +50,10 @@ Route::middleware('api')->prefix('api/arealtime/posts')
 
         Route::controller(PostCommentController::class)
             ->name('comments.')
-            ->prefix('comments')
+            ->prefix('{post}/comments')
             ->group(function () {
-                Route::get('{id}', 'index');
-                Route::post('{id}', 'store');
+                Route::get('', 'index');
+                Route::post('', 'store');
                 Route::delete('{id}', 'destroy');
             });
     });

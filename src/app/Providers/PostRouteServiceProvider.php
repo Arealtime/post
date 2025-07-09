@@ -19,5 +19,6 @@ class PostRouteServiceProvider extends ServiceProvider
         });
 
         Route::pattern('ownedPost', '[0-9]+');
+        
     }
 }

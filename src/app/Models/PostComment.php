@@ -4,4 +4,8 @@ namespace Arealtime\Post\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PostComment extends Model {}
+class PostComment extends Model
+{
+
+    protected $fillable = ['content', 'user_id'];
+}
