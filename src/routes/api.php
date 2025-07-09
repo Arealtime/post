@@ -5,6 +5,7 @@ use Arealtime\Post\App\Http\Controllers\PostCommentController;
 use Arealtime\Post\App\Http\Controllers\PostController;
 use Arealtime\Post\App\Http\Controllers\PostLikeController;
 use Arealtime\Post\App\Http\Controllers\PostPinController;
+use Arealtime\Post\App\Http\Controllers\PostPublishController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('api')->prefix('api/arealtime/posts')
@@ -30,6 +31,13 @@ Route::middleware('api')->prefix('api/arealtime/posts')
             ->group(function () {
                 Route::get('archived', 'archived');
                 Route::post('{ownedPost}/archive', 'toggleArchive');
+            });
+
+        Route::controller(PostPublishController::class)
+            ->name('published.')
+            ->group(function () {
+                Route::get('published', 'published');
+                Route::get('unpublished', 'unpublished');
             });
 
         Route::controller(PostLikeController::class)
