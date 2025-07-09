@@ -3,31 +3,23 @@
 namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\Post;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 trait PostPublishAction
 {
 
     /**
-     * Get all published posts for the currently authenticated user.
-     *
-     * A published post is one whose 'posted_at' date/time is in the past or now.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of published posts
+     * @return Collection<Post>
      */
-    public function allPublished()
+    public function allPublished(): Collection
     {
         return Post::currentUser()->published()->get();
     }
 
     /**
-     * Get all unpublished posts for the currently authenticated user.
-     *
-     * An unpublished post is one whose 'posted_at' date/time is in the future.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of unpublished posts
+     * @return Collection<Post>
      */
-    public function allUnPublished()
+    public function allUnPublished(): Collection
     {
         return Post::currentUser()->unPublished()->get();
     }

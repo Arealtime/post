@@ -3,24 +3,21 @@
 namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\Post;
+use Illuminate\Support\Collection;
 
 trait PostPinAction
 {
-
+    
     /**
-     * Get all pinned posts for the currently authenticated user.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of pinned posts
+     * @return Collection<Post>
      */
-    public function allPinned()
+    public function allPinned(): Collection
     {
         return Post::currentUser()->pinned()->get();
     }
 
     /**
      * @return Post
-     *
-     * @throws ModelNotFoundException
      */
     public function togglePin(): Post
     {

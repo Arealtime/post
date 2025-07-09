@@ -2,7 +2,9 @@
 
 namespace Arealtime\Post\App\Http\Controllers;
 
+use Arealtime\Post\App\Http\Resources\PostResource;
 use Arealtime\Post\App\Services\PostService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
 class PostPublishController extends Controller
@@ -10,26 +12,18 @@ class PostPublishController extends Controller
     public function __construct(private readonly PostService $postService) {}
 
     /**
-     * Get all published posts for the currently authenticated user.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of published posts
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If any required data is missing
+     * @return AnonymousResourceCollection<PostResource>
      */
-    public function published()
+    public function published(): AnonymousResourceCollection
     {
-        return $this->postService->allPublished();
+        return PostResource::collection($this->postService->allPublished());
     }
 
     /**
-     * Get all unpublished posts for the currently authenticated user.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of unpublished posts
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If any required data is missing
+     * @return AnonymousResourceCollection<PostResource>
      */
-    public function unpublished()
+    public function unpublished(): AnonymousResourceCollection
     {
-        return $this->postService->allUnPublished();
+        return PostResource::collection($this->postService->allUnPublished());
     }
 }
