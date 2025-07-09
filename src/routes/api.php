@@ -7,14 +7,15 @@ use Arealtime\Post\App\Http\Controllers\PostLikeController;
 use Arealtime\Post\App\Http\Controllers\PostPinController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('api/arealtime/posts')
+Route::middleware('api')->prefix('api/arealtime/posts')
     ->name('arealtime.posts.')
     ->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('', 'index');
+            Route::get('{post}', 'get');
             Route::post('', 'store');
-            Route::put('{post}', 'update');
-            Route::delete('{post}', 'destroy');
+            Route::put('{ownedPost}', 'update');
+            Route::delete('{ownedPost}', 'destroy');
         });
 
         Route::controller(PostPinController::class)

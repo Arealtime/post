@@ -41,6 +41,6 @@ trait PostScope
 
     public function scopeCurrentUser(Builder $builder): Builder
     {
-        return $builder->where('user_id', auth()->id());
+        return $builder->where('user_id', auth()->id() ?? 1);
     }
 }
