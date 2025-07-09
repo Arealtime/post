@@ -17,5 +17,7 @@ class PostRouteServiceProvider extends ServiceProvider
         Route::bind('post', function ($id) {
             return Post::where('id', $id)->firstOrFail();
         });
+
+        Route::pattern('ownedPost', '[0-9]+');
     }
 }

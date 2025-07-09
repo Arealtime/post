@@ -1,6 +1,7 @@
 <?php
 return [
     'operation' => [
+        'complete' => 'Operation completed successfully.',
         'success' => [
             'create' => 'Post created successfully.',
             'update' => 'Post updated successfully.',

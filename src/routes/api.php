@@ -12,7 +12,7 @@ Route::middleware('api')->prefix('api/arealtime/posts')
     ->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('', 'index');
-            Route::get('{post}', 'get');
+            Route::get('{ownedPost}', 'get');
             Route::post('', 'store');
             Route::put('{ownedPost}', 'update');
             Route::delete('{ownedPost}', 'destroy');
@@ -20,10 +20,9 @@ Route::middleware('api')->prefix('api/arealtime/posts')
 
         Route::controller(PostPinController::class)
             ->name('pin.')
-            ->prefix('pin')
             ->group(function () {
-                Route::get('{post}', 'pinned');
-                Route::post('{post}/toggle', 'togglePin');
+                Route::get('pinned', 'pinned');
+                Route::post('{post}/pin', 'togglePin');
             });
 
         Route::controller(PostArchiveController::class)
