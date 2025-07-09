@@ -24,6 +24,7 @@ trait PostArchiveAction
     public function toggleArchive(): Post
     {
         $this->checkPostSet();
+        
         $this->post->is_archived = !$this->post->is_archived;
         $this->post->save();
 

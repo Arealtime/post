@@ -16,16 +16,19 @@ trait PostPinAction
     {
         return Post::currentUser()->pinned()->get();
     }
+
     /**
-     * Toggle the is_pinned status of a post.
+     * @return Post
      *
      * @throws ModelNotFoundException
      */
-    public function togglePin(Post $post): Post
+    public function togglePin(): Post
     {
-        $post->is_pinned = !$post->is_pinned;
-        $post->save();
+        $this->checkPostSet();
 
-        return $post;
+        $this->post->is_pinned = !$this->post->is_pinned;
+        $this->post->save();
+
+        return $this->post;
     }
 }

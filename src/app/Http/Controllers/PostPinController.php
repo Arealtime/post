@@ -27,7 +27,8 @@ class PostPinController extends Controller
      */
     public function togglePin(Post $post): JsonResponse
     {
-        $this->postService->togglePin($post);
+        $this->postService->setPost($post)->togglePin();
+
         return response()->json([
             'message' => __('post::messages.operation.complete')
         ]);

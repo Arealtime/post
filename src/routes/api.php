@@ -22,14 +22,14 @@ Route::middleware('api')->prefix('api/arealtime/posts')
             ->name('pin.')
             ->group(function () {
                 Route::get('pinned', 'pinned');
-                Route::post('{post}/pin', 'togglePin');
+                Route::post('{ownedPost}/pin', 'togglePin');
             });
 
         Route::controller(PostArchiveController::class)
             ->name('archive.')
             ->group(function () {
                 Route::get('archived', 'archived');
-                Route::post('{post}/archive', 'toggleArchive');
+                Route::post('{ownedPost}/archive', 'toggleArchive');
             });
 
         Route::controller(PostLikeController::class)

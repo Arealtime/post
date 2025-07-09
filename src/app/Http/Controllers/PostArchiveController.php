@@ -2,37 +2,35 @@
 
 namespace Arealtime\Post\App\Http\Controllers;
 
+use Arealtime\Post\App\Http\Resources\PostResource;
 use Arealtime\Post\App\Models\Post;
 use Arealtime\Post\App\Services\PostService;
 use Illuminate\Routing\Controller;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostArchiveController extends Controller
 {
     public function __construct(private readonly PostService $postService) {}
 
     /**
-     * @return Collection<Post>
-     *
-     * @throws ModelNotFoundException
+     * @return AnonymousResourceCollection<PostResource>
      */
-    public function archived(): Collection
+    public function archived(): AnonymousResourceCollection
     {
-        return $this->postService->allArchived();
+        return PostResource::collection($this->postService->allArchived());
     }
 
     /**
      * @param Post $post
-     * 
-     * @return Post
-     *
-     * @throws ModelNotFoundException
-     * @throws Throwable
+     * @return JsonResponse
      */
-    public function toggleArchive(Post $post): Post
+    public function toggleArchive(Post $post): JsonResponse
     {
-        return $this->postService->setPost($post)->toggleArchive();
+        $this->postService->setPost($post)->toggleArchive();
+
+        return response()->json([
+            'message' => __('post::messages.operation.complete')
+        ]);
     }
 }
