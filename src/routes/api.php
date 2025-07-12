@@ -8,7 +8,7 @@ use Arealtime\Post\App\Http\Controllers\PostPinController;
 use Arealtime\Post\App\Http\Controllers\PostPublishController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('api')->prefix('api/arealtime/posts')
+Route::middleware(['api', 'auth:sanctum'])->prefix('api/arealtime/posts')
     ->name('arealtime.posts.')
     ->group(function () {
         Route::controller(PostController::class)->group(function () {
