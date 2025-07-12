@@ -21,7 +21,7 @@ class CreatePostCommentsTable extends Migration
             $table->unsignedBigInteger('like_count')->default(0);
 
             $table->boolean('is_hidden')->default(false);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

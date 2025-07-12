@@ -3,6 +3,8 @@
 namespace Arealtime\Post\App\Services;
 
 use Arealtime\Post\App\Models\Post;
+use Arealtime\Post\App\Models\PostLike;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -11,13 +13,9 @@ trait PostLikeAction
 {
 
     /**
-     * Get all likes for the currently set post.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection The collection of likes related to the current post
-     *
-     * @throws \Exception If the current post is not set
+     * @return Collection<PostLike>
      */
-    public function allLikes()
+    public function allLikes(): Collection
     {
         $this->checkPostSet();
 
